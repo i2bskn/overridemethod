@@ -23,18 +23,11 @@ const (
 		methodConnect | methodOptions | methodTrace
 )
 
-func NewMiddleware() func(http.Handler) http.Handler {
-	return func(h http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			h.ServeHTTP(w, overridedRequest(r))
-		})
-	}
-}
-
-func overridedRequest(r *http.Request) *http.Request {
+func overrideRequest(r *http.Request) *http.Request {
 	if isAcceptMethod(r.Method) {
 		method := overrideMethod(r)
 		if method != r.Method && isAcceptMethod(method) {
+			r = setOrigin(r, r.Method)
 			r.Method = method
 		}
 	}
