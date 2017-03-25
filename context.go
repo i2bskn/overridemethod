@@ -8,7 +8,7 @@ import (
 type contextKey int
 
 const (
-	originMethodKey = iota + 1
+	originMethodKey contextKey = iota + 1
 )
 
 func Origin(r *http.Request) string {
