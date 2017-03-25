@@ -2,6 +2,7 @@ package overridemethod
 
 import (
 	"net/http"
+	"strings"
 )
 
 const (
@@ -35,13 +36,12 @@ func overrideRequest(r *http.Request) *http.Request {
 	return r
 }
 
-func overrideMethod(r *http.Request) (m string) {
+func overrideMethod(r *http.Request) string {
 	m = r.FormValue(overrideMethodParam)
 	if len(m) > 0 {
-		return
+		return strings.ToUpper(m)
 	}
-	m = r.Header.Get(overrideMethodHeader)
-	return
+	return strings.ToUpper(r.Header.Get(overrideMethodHeader))
 }
 
 func isAcceptMethod(m string) bool {
