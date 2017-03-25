@@ -24,9 +24,9 @@ const (
 		methodConnect | methodOptions | methodTrace
 )
 
-func overrideRequest(r *http.Request) *http.Request {
+func OverrideHTTPRequest(r *http.Request) *http.Request {
 	if isAcceptMethod(r.Method) {
-		method := overrideMethod(r)
+		method := OverrideHTTPMethod(r)
 		if method != r.Method && isAcceptMethod(method) {
 			r = setOrigin(r, r.Method)
 			r.Method = method
@@ -36,8 +36,8 @@ func overrideRequest(r *http.Request) *http.Request {
 	return r
 }
 
-func overrideMethod(r *http.Request) string {
-	m = r.FormValue(overrideMethodParam)
+func OverrideHTTPMethod(r *http.Request) string {
+	m := r.FormValue(overrideMethodParam)
 	if len(m) > 0 {
 		return strings.ToUpper(m)
 	}

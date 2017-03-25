@@ -32,39 +32,39 @@ var pkgMethods = []int{
 	methodTrace,
 }
 
-func TestOverrideRequest(t *testing.T) {
+func TestOverrideHTTPRequest(t *testing.T) {
 	r := httptest.NewRequest(http.MethodPost, "/", nil)
-	r = overrideRequest(r)
+	r = OverrideHTTPRequest(r)
 	if len(Origin(r)) > 0 {
 		t.Fatal("overrideRequest: should ignore requests without override method")
 	}
 
 	r = httptest.NewRequest(http.MethodPost, "/", nil)
 	r.Header.Set(overrideMethodHeader, http.MethodPost)
-	r = overrideRequest(r)
+	r = OverrideHTTPRequest(r)
 	if len(Origin(r)) > 0 {
 		t.Fatal("overrideRequest: should ignore when no change by overwriting")
 	}
 
 	r = httptest.NewRequest(unknownMethod, "/", nil)
 	r.Header.Set(overrideMethodHeader, http.MethodPut)
-	r = overrideRequest(r)
+	r = OverrideHTTPRequest(r)
 	if len(Origin(r)) > 0 {
 		t.Fatal("overrideRequest: should ignore when invalid override method")
 	}
 
 	r = httptest.NewRequest(http.MethodPost, "/", nil)
 	r.Header.Set(overrideMethodHeader, http.MethodPut)
-	r = overrideRequest(r)
+	r = OverrideHTTPRequest(r)
 	if len(Origin(r)) == 0 {
 		t.Fatal("overrideRequest: valid override method has not been overwritten")
 	}
 }
 
-func TestOverrideMethod(t *testing.T) {
+func TestOverrideHTTPMethod(t *testing.T) {
 	r := httptest.NewRequest(http.MethodPost, "/", nil)
 	expected := ""
-	actual := overrideMethod(r)
+	actual := OverrideHTTPMethod(r)
 	if expected != actual {
 		t.Fatalf("overrideMethod(form none, header none): expected empty, actual %s", actual)
 	}
@@ -72,7 +72,7 @@ func TestOverrideMethod(t *testing.T) {
 	r = httptest.NewRequest(http.MethodPost, "/", nil)
 	expected = http.MethodPut
 	r.Header.Set(overrideMethodHeader, expected)
-	actual = overrideMethod(r)
+	actual = OverrideHTTPMethod(r)
 	if expected != actual {
 		t.Fatalf("overrideMethod(form none, header %s): expected %s, actual %s", expected, expected, actual)
 	}
@@ -81,7 +81,7 @@ func TestOverrideMethod(t *testing.T) {
 	r.ParseForm()
 	expected = http.MethodPut
 	r.Form.Set(overrideMethodParam, expected)
-	actual = overrideMethod(r)
+	actual = OverrideHTTPMethod(r)
 	if expected != actual {
 		t.Fatalf("overrideMethod(form %s, header none): expected %s, actual %s", expected, expected, actual)
 	}
@@ -91,7 +91,7 @@ func TestOverrideMethod(t *testing.T) {
 	expected = http.MethodPut
 	r.Form.Set(overrideMethodParam, expected)
 	r.Header.Set(overrideMethodHeader, http.MethodDelete)
-	actual = overrideMethod(r)
+	actual = OverrideHTTPMethod(r)
 	if expected != actual {
 		t.Fatalf("overrideMethod(form %s, header %s): expected %s, actual %s", expected, http.MethodDelete, expected, actual)
 	}
