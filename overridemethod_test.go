@@ -106,7 +106,7 @@ func TestIsAcceptMethod(t *testing.T) {
 	}
 
 	if isAcceptMethod(unknownMethod) {
-		t.Fatalf("% is accepted", unknownMethod)
+		t.Fatalf("%s is accepted", unknownMethod)
 	}
 }
 

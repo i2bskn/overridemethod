@@ -11,6 +11,8 @@ const (
 	originMethodKey contextKey = iota + 1
 )
 
+// Origin returns the HTTP method before overriding.
+// If not overridden, returns the empty string.
 func Origin(r *http.Request) string {
 	ctx := r.Context()
 	if origin, ok := ctx.Value(originMethodKey).(string); ok {

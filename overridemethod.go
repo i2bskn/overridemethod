@@ -24,6 +24,8 @@ const (
 		methodConnect | methodOptions | methodTrace
 )
 
+// OverrideHTTPRequest returns the overridden http.Request.
+// If not override, returns the received argument as it is.
 func OverrideHTTPRequest(r *http.Request) *http.Request {
 	if isAcceptMethod(r.Method) {
 		method := OverrideHTTPMethod(r)
@@ -36,6 +38,8 @@ func OverrideHTTPRequest(r *http.Request) *http.Request {
 	return r
 }
 
+// OverrideHTTPMethod returns the overridden HTTP method.
+// If not override, returns the empty string.
 func OverrideHTTPMethod(r *http.Request) string {
 	if r.Method == http.MethodPost {
 		m := r.PostFormValue(overrideMethodParam)
