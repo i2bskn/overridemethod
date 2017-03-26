@@ -37,9 +37,11 @@ func OverrideHTTPRequest(r *http.Request) *http.Request {
 }
 
 func OverrideHTTPMethod(r *http.Request) string {
-	m := r.FormValue(overrideMethodParam)
-	if len(m) > 0 {
-		return strings.ToUpper(m)
+	if r.Method == http.MethodPost {
+		m := r.PostFormValue(overrideMethodParam)
+		if len(m) > 0 {
+			return strings.ToUpper(m)
+		}
 	}
 	return strings.ToUpper(r.Header.Get(overrideMethodHeader))
 }

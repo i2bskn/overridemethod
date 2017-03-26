@@ -3,6 +3,7 @@ package overridemethod
 import (
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 )
 
@@ -71,7 +72,7 @@ func TestOverrideHTTPMethod(t *testing.T) {
 
 	r = httptest.NewRequest(http.MethodPost, "/", nil)
 	expected = http.MethodPut
-	r.Header.Set(overrideMethodHeader, expected)
+	r.Header.Set(overrideMethodHeader, strings.ToLower(expected))
 	actual = OverrideHTTPMethod(r)
 	if expected != actual {
 		t.Fatalf("overrideMethod(form none, header %s): expected %s, actual %s", expected, expected, actual)
@@ -80,7 +81,7 @@ func TestOverrideHTTPMethod(t *testing.T) {
 	r = httptest.NewRequest(http.MethodPost, "/", nil)
 	r.ParseForm()
 	expected = http.MethodPut
-	r.Form.Set(overrideMethodParam, expected)
+	r.PostForm.Set(overrideMethodParam, strings.ToLower(expected))
 	actual = OverrideHTTPMethod(r)
 	if expected != actual {
 		t.Fatalf("overrideMethod(form %s, header none): expected %s, actual %s", expected, expected, actual)
@@ -89,7 +90,7 @@ func TestOverrideHTTPMethod(t *testing.T) {
 	r = httptest.NewRequest(http.MethodPost, "/", nil)
 	r.ParseForm()
 	expected = http.MethodPut
-	r.Form.Set(overrideMethodParam, expected)
+	r.PostForm.Set(overrideMethodParam, expected)
 	r.Header.Set(overrideMethodHeader, http.MethodDelete)
 	actual = OverrideHTTPMethod(r)
 	if expected != actual {
